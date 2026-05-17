@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-API_KEY = os.environ.get("GEMINI_API_KEY")
+API_KEY = "AIzaSyCdhbvQSlzswmWt7TGPTIuz2SguThhKlqE"
 
 # READ DATASET
 df = pd.read_excel("2000 DATASET HOSPITAL VA.xlsx")
