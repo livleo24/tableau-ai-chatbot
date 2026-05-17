@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import pandas as pd
@@ -34,6 +34,10 @@ Patient Count by Admission Type:
 Top Hospitals:
 {df['Hospital'].value_counts().head(5).to_string()}
 """
+
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
