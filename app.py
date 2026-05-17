@@ -3,7 +3,8 @@ from flask_cors import CORS
 import requests
 import pandas as pd
 import os
-API_KEY = "AIzaSyCdhbvQSlzswmWt7TGPTIuz2SguThhKlqE"
+
+API_KEY = os.environ.get("GEMINI_API_KEY")
 
 app = Flask(__name__)
 CORS(app)
