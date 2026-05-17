@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Dashboard Assistant</title>
+
+    <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+
+    <style>
+        body{
+            font-family: Arial;
+            background:#2f2f2f;
+            color:white;
+            margin:0;
+            padding:20px;
+        }
+
+        h1{
+            margin-top:0;
+            font-size:32px;
+        }
+
+        #chatbox{
+            height:500px;
+            overflow-y:auto;
+            background:#3a3a3a;
+            padding:15px;
+            border-radius:12px;
+            margin-bottom:20px;
+        }
+
+        .message{
+            margin-bottom:20px;
+            padding:12px;
+            border-radius:10px;
+        }
+
+        .user{
+            background:#4a4a4a;
+        }
+
+        .ai{
+            background:#1f4f8f;
+        }
+
+        #input-area{
+            display:flex;
+            gap:10px;
+        }
+
+        input{
+            flex:1;
+            padding:15px;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+        }
+
+        button{
+            padding:15px 25px;
+            border:none;
+            border-radius:10px;
+            background:#4da3ff;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#2d8cff;
+        }
+        
+        #tableauViz{
+            width:100%;
+            height:700px;
+            margin-bottom:20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>AI Dashboard Assistant</h1>
+
+    <div id="chatbox"></div>
+
+    <div id="input-area">
+        <input
+            type="text"
+            id="question"
+            placeholder="Ask something about your dashboard..."
+        >
+
+        <button onclick="sendQuestion()">Send</button>
+    </div>
+
+<script>
+
+async function sendQuestion(){
+
+    const questionInput = document.getElementById("question");
+    const chatbox = document.getElementById("chatbox");
+    const question = questionInput.value;
+
+    if(question.trim() === "") return;
+
+    chatbox.innerHTML += `
+        <div class="message user">
+            <b>You:</b><br>${question}
+        </div>
+    `;
+
+    questionInput.value = "";
+
+    const response = await fetch("http://127.0.0.1:5000/chat", {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            question:question,
+            data:`
+            Total Patients: 2000
+            Average Billing Amount: 25500
+            Average Length of Stay: 18
+            Top Hospital: Loyola UM Center
+
+            Patient Count by Medical Condition:
+            Flu: 269
+            Alzheimer's: 258
+            Diabetes: 247
+            Obesity: 245
+            Cancer: 244
+            Heart Disease: 238
+            Asthma: 234
+            Infections: 231
+            `
+        })
+    });
+
+    const result = await response.json();
+
+    chatbox.innerHTML += `
+        <div class="message ai">
+            <b>Gemini AI:</b><br>${result.answer}
+        </div>
+    `;
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+</script>
+
+</body>
+</html>
